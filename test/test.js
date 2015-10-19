@@ -57,7 +57,7 @@ MonTestCase.prototype.testnewPosition3 = function(){
     assertTrue(paleto.getCurrentPlayer() == "Black");
 };
 
-MonTestCase.prototype.testotherPlayerPlayNb = function(){
+MonTestCase.prototype.testBlackPlayNb = function(){
     var paleto = new Paleto();
     paleto.play("a1");
     paleto.rotation(1);
@@ -66,10 +66,11 @@ MonTestCase.prototype.testotherPlayerPlayNb = function(){
     assertTrue(paleto.getCase("a1") == "Black");
 };
 
-MonTestCase.prototype.testotherPlayerPlayRot = function(){
+MonTestCase.prototype.testBlackPlayRot = function(){
     var paleto = new Paleto();
-
-    assertTrue(paleto.getNbBalls() == x);
-
+    paleto.play("a1");
+    paleto.rotation(1);
+    paleto.play("a1");
+    paleto.antirotation(1);
+    assertTrue(paleto.getCase("a1") == "White");
 };
-

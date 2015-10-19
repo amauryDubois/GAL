@@ -10,7 +10,7 @@ var Paleto = function(){
     var player2 = "Black";
     var currentPlayer ;
     var that = this;
-
+    var size ;
     this.setNbBalls= function( billes){
         nb += billes;
     };
@@ -84,6 +84,7 @@ var Paleto = function(){
             }
         }
         currentPlayer = player1;
+        size = 6;
     };
     this.getTabSize= function(){
         var i,j;
@@ -101,71 +102,80 @@ var Paleto = function(){
 
     this.rotation = function(quart ){
         var i,j;
+        var offsetI, offsetJ ;
         var tmp = new Array(3);
+        switch (quart){
+            case 1:
+                offsetI = 0 ; offsetJ = 0;
+                break;
+            case 2 :
+                offsetI = 0 ; offsetJ = size/2;
+                break;
+            case 3:
+                offsetI = size/2 ; offsetJ = 0;
+                break;
+            case 4: offsetI = size/2 ; offsetJ = size/2;
+        }
+
         for (var k = 0; k < 3 ; k++){
             tmp[k] = new Array(3);
         }
-        if (quart == 1){
-            for(i =0 ;i< 3 ; i++){
-                for(j = 0; j< 3 ; j++){
-                    tmp[i][j] = this.getCase2(2-j,i);
-                }
-            }
-            for(i =0 ;i< 3 ; i++){
-                for(j = 0; j< 3 ; j++){
-                    this.setCase(i,j,tmp[i][j]);
-                   // tmp[i][j] = this.getCase(2-j,i);
-                }
-            }
 
+        for(i =0 ;i< 3 ; i++){
+            for(j = 0; j< 3 ; j++){
+                tmp[i][j] = this.getCase2((2-j)+offsetI,i+offsetJ);
+            }
         }
+        for(i =0 ;i< 3 ; i++){
+            for(j = 0; j< 3 ; j++){
+                this.setCase(i+offsetI,j+offsetJ,tmp[i][j]);
 
-        if (quart == 2){
-            for(i =0 ;i< 3 ; i++){
-                for(j = 0; j< 3 ; j++){
-                    tmp[i][j] = this.getCase2(2-j,i+3);
-                }
-            }
-            for(i =0 ;i< 3 ; i++){
-                for(j = 0; j< 3 ; j++){
-                    this.setCase(i,j+3,tmp[i][j]);
-
-                }
             }
         }
 
-        if (quart == 3){
-            for(i =0 ;i< 3 ; i++){
-                for(j = 0; j< 3 ; j++){
-                    tmp[i][j] = this.getCase2(5-j,i);
-                }
-            }
-            for(i =0 ;i< 3 ; i++){
-                for(j = 0; j< 3 ; j++){
-                    this.setCase(5-i,j,tmp[i][j]);
-
-                }
-            }
-
-
-        }
-        if (quart == 4){
-            for(i =0 ;i< 3 ; i++){
-                for(j = 0; j< 3 ; j++){
-                    tmp[i][j] = this.getCase2(5-j,i+3);
-                }
-            }
-            for(i =0 ;i< 3 ; i++){
-                for(j = 0; j< 3 ; j++){
-                    this.setCase(5-i,j+3,tmp[i][j]);
-
-                }
-            }
-        }
         that.ChangeTurn();
         return true;
     };
 
+    this.antirotation= function (quart){
+        var i,j;
+        var tmp = new Array(3);
+        var offsetI, offsetJ ;
+        switch (quart){
+            case 1:
+                offsetI = 0 ; offsetJ = 0;
+                break;
+            case 2 :
+                offsetI = 0 ; offsetJ = size/2;
+                break;
+            case 3:
+                offsetI = size/2 ; offsetJ = 0;
+                break;
+            case 4: offsetI = size/2 ; offsetJ = size/2;
+        }
+
+
+        for (var k = 0; k < 3 ; k++){
+            tmp[k] = new Array(3);
+        }
+
+        if (quart == 1){
+            for(i =0 ;i< 3 ; i++){
+                for(j = 0; j< 3 ; j++){
+                    tmp[i][j] = this.getCase2(j+offsetI,(2-i)+offsetJ);
+                }
+            }
+            for(i =0 ;i< 3 ; i++){
+                for(j = 0; j< 3 ; j++){
+                    this.setCase(i+offsetI,j+offsetJ,tmp[i][j]);
+                    // tmp[i][j] = this.getCase(2-j,i);
+                }
+            }
+
+        }
+        that.ChangeTurn();
+        return true;
+    };
     init();
 
 
