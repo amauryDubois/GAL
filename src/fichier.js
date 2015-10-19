@@ -1,7 +1,10 @@
 /**
  * Created by adubois on 01/10/15.
  */
-
+function NotEmptyException(msg){
+    this.message = msg;
+    this.name ="Not Empty";
+}
 
 var Paleto = function(){
     var plateau =[];
@@ -67,12 +70,14 @@ var Paleto = function(){
         var res = t[0].charCodeAt(0)- a.charCodeAt(0);
         var col = parseInt(t[1])-1;
 
-        if (that.getCase(t) == 0){
-            that.setCase(res,col,that.getCurrentPlayer());
-            that.setNbBalls(1);
-            return true;
+        if (that.getCase(t) != 0){
+            throw new NotEmptyException("deja utilise");
+
         }
-        return false;
+        that.setCase(res,col,that.getCurrentPlayer());
+        that.setNbBalls(1);
+        return true;
+
     };
     var init = function () {
         nb = 0;

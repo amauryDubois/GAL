@@ -82,5 +82,5 @@ MonTestCase.prototype.testBlackPlayException = function(){
     paleto.play("a1");
     paleto.antirotation(1);
     assertTrue(paleto.getCase("a1") == "White");
-    assertException(paleto.play("a1"),MyException);
+    assertException(function(){paleto.play("a1")},"Not Empty");
 };
