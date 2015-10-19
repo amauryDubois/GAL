@@ -74,3 +74,13 @@ MonTestCase.prototype.testBlackPlayRot = function(){
     paleto.antirotation(1);
     assertTrue(paleto.getCase("a1") == "White");
 };
+
+MonTestCase.prototype.testBlackPlayException = function(){
+    var paleto = new Paleto();
+    paleto.play("a1");
+    paleto.rotation(1);
+    paleto.play("a1");
+    paleto.antirotation(1);
+    assertTrue(paleto.getCase("a1") == "White");
+    assertException(paleto.play("a1"),MyException);
+};
