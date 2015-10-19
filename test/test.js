@@ -65,3 +65,11 @@ MonTestCase.prototype.testotherPlayerPlayNb = function(){
     assertTrue(paleto.getNbBalls() == 2);
     assertTrue(paleto.getCase("a1") == "Black");
 };
+
+MonTestCase.prototype.testotherPlayerPlayRot = function(){
+    var paleto = new Paleto();
+
+    assertTrue(paleto.getNbBalls() == x);
+
+};
+
