@@ -54,13 +54,14 @@ var Paleto = function () {
         }
     };
     this.play = function (w) {
-        var t = that.transformation(w), a = 'a', res, col;
-        res = t[0].charCodeAt(0) - a.charCodeAt(0);
-        col = parseInt(t[1]) - 1;
+        var t = that.transformation(w), a = 'a', line, col;
+        line = parseInt(t[1]) - 1;
+        col = t[0].charCodeAt(0) - a.charCodeAt(0);
         if (that.getCase(t) !== 0) {
             throw new NotEmptyException("deja utilise");
         }
-        that.setCase(res, col, that.getCurrentPlayer());
+
+        that.setCase(line, col, that.getCurrentPlayer());
         that.setNbBalls(1);
         return true;
     };
@@ -76,16 +77,7 @@ var Paleto = function () {
         currentPlayer = player1;
         size = 6;
     };
-    /*this.getTabSize = function () {
-        var i, j, tmp;
-        for (i = 'a'; i < 'f'; i++) {
-            for (j = 1; j < 6; j++) {
-                tmp = that.transformation([i, j]);
-                if (that.getCase(tmp) !== 0) return 1;
-            }
-        }
-        return 0;
-    };*/
+
    /* this.offset = function (quart) {
         var offsetI, offsetJ;
         switch (quart) {
@@ -120,6 +112,7 @@ var Paleto = function () {
         arr = this.create2DArray();
         for (line = 0; line < 3; line++) {
             for (col = 0; col < 3; col++) {
+               // console.log(this.getCase2((2 - col) + offsetI, line + offsetJ));
                 arr[line][col] = this.getCase2((2 - col) + offsetI, line + offsetJ);
             }
         }
@@ -151,7 +144,7 @@ var Paleto = function () {
     this.antirotation = function (offsetI, offsetJ) {
         var line, col, tmp;
 
-        tmp = this.antiSubRotation(offsetI,offsetJ);
+        tmp = this.antiSubRotation(offsetI, offsetJ);
 
             for (line = 0; line < 3; line++) {
                 for (col = 0; col < 3; col++) {

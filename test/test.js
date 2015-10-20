@@ -84,3 +84,44 @@ MonTestCase.prototype.testBlackPlayException = function(){
     assertTrue(paleto.getCase("a1") == "White");
     assertException(function(){paleto.play("a1")},"Not Empty");
 };
+
+MonTestCase.prototype.testlittlegame = function(){
+    var paleto = new Paleto();
+
+    paleto.play("a1");
+    paleto.rotation(0,0);
+
+    paleto.play("a1");
+    paleto.antirotation(0,0);
+
+    paleto.play("b1");
+
+    paleto.rotation(0,0);
+
+    paleto.play("a2");
+    paleto.antirotation(0,0);
+
+    paleto.play("c1");
+    paleto.rotation(0,0);
+
+    paleto.play("a3");
+    paleto.antirotation(0,0);
+
+    paleto.play("d1");
+    paleto.antirotation(0,3);
+
+    paleto.play("f3");
+    paleto.rotation(0,3);
+
+
+    assertTrue(paleto.getNbBalls() == 8);
+    assertTrue(paleto.getCase("a1") == "White");
+    assertTrue(paleto.getCase("b1") == "White");
+    assertTrue(paleto.getCase("c1") == "White");
+    assertTrue(paleto.getCase("d1") == "White");
+    assertTrue(paleto.getCase("a3") == "Black");
+    assertTrue(paleto.getCase("b3") == "Black");
+    assertTrue(paleto.getCase("c3") == "Black");
+    assertTrue(paleto.getCase("d3") == "Black");
+
+};
