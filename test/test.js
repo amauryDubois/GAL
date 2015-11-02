@@ -30,37 +30,15 @@ MonTestCase.prototype.testnewPosition = function(){
     var paleto = new Paleto();
     paleto.play("a1");
 
-    paleto.rotation(0,0,1);
+    paleto.rotation(0,0);
     assertTrue(paleto.getCase("c1") == "White");
     assertTrue(paleto.getCurrentPlayer() == "Black");
 };
-/*
-MonTestCase.prototype.testnewPosition2 = function(){
-    var paleto = new Paleto();
-    paleto.play("d1");
-    paleto.rotation(2);
-    assertTrue(paleto.getCase("d1") == 0);
-};
-
-MonTestCase.prototype.testnewPosition4 = function(){
-    var paleto = new Paleto();
-    paleto.play("a1");
-    paleto.rotation(3);
-
-    assertTrue(paleto.getCase("a1") == "White");
-};
-
-MonTestCase.prototype.testnewPosition3 = function(){
-    var paleto = new Paleto();
-    paleto.play("a1");
-    paleto.rotation(4);
-    assertTrue(paleto.getCurrentPlayer() == "Black");
-};*/
 
 MonTestCase.prototype.testBlackPlayNb = function(){
     var paleto = new Paleto();
     paleto.play("a1");
-    paleto.rotation(0,0,1);
+    paleto.rotation(0,0);
     paleto.play("a1");
     assertTrue(paleto.getNbBalls() == 2);
     assertTrue(paleto.getCase("a1") == "Black");
@@ -69,18 +47,18 @@ MonTestCase.prototype.testBlackPlayNb = function(){
 MonTestCase.prototype.testBlackPlayRot = function(){
     var paleto = new Paleto();
     paleto.play("a1");
-    paleto.rotation(0,0,1);
+    paleto.rotation(0,0);
     paleto.play("a1");
-    paleto.antirotation(0,0,1);
+    paleto.antirotation(0,0);
     assertTrue(paleto.getCase("a1") == "White");
 };
 
 MonTestCase.prototype.testBlackPlayException = function(){
     var paleto = new Paleto();
     paleto.play("a1");
-    paleto.rotation(0,0,1);
+    paleto.rotation(0,0);
     paleto.play("a1");
-    paleto.antirotation(0,0,1);
+    paleto.antirotation(0,0);
     assertTrue(paleto.getCase("a1") == "White");
     assertException(function(){paleto.play("a1")},"Not Empty");
 };
@@ -108,10 +86,10 @@ MonTestCase.prototype.testlittlegame = function(){
     paleto.antirotation(0,0);
 
     paleto.play("d1");
-    paleto.antirotation(0,3);
+    paleto.antirotation(0,1);
 
     paleto.play("f3");
-    paleto.rotation(0,3);
+    paleto.rotation(0,1);
 
 
     assertTrue(paleto.getNbBalls() == 8);
@@ -125,3 +103,80 @@ MonTestCase.prototype.testlittlegame = function(){
     assertTrue(paleto.getCase("d3") == "Black");
 
 };
+
+MonTestCase.prototype.testlittle2game = function() {
+    var paleto = new Paleto();
+
+    paleto.play("a1");
+    paleto.rotation(0,0);
+
+    paleto.play("a1");
+    paleto.antirotation(0,0);
+
+    paleto.play("b1");
+    paleto.rotation(0,0);
+
+    paleto.play("a2");
+    paleto.antirotation(0,0);
+
+    paleto.play("c1");
+    paleto.rotation(0,0);
+
+    paleto.play("a3");
+    paleto.antirotation(0,0);
+
+    paleto.play("d1");
+    paleto.antirotation(0,1);
+
+    paleto.play("f3");
+    paleto.rotation(0,1);
+
+    paleto.play("e1");
+    // paleto.rotation(0,3);
+
+    assertTrue(paleto.getNbBalls() == 9);
+    assertTrue(paleto.getCase("a1") == "White");
+    assertTrue(paleto.getCase("b1") == "White");
+    assertTrue(paleto.getCase("c1") == "White");
+    assertTrue(paleto.getCase("d1") == "White");
+    assertTrue(paleto.getCase("a3") == "Black");
+    assertTrue(paleto.getCase("b3") == "Black");
+    assertTrue(paleto.getCase("c3") == "Black");
+    assertTrue(paleto.getCase("d3") == "Black");
+    assertTrue(paleto.WinHorizontal("e1") == true);
+};
+
+MonTestCase.prototype.testlittle3game = function() {
+    var paleto = new Paleto();
+
+    paleto.put("c4cbl");
+    paleto.put("d4abr");
+    paleto.put("c3ctl");
+    paleto.put("c3ctl");
+    paleto.put("c4cbl");
+    paleto.put("e5cbr");
+    paleto.put("b1ctl");
+    paleto.put("b2ctr");
+    paleto.put("c4cbl");
+    paleto.play("c3");
+    paleto.Windiag("c3");
+};
+
+MonTestCase.prototype.testlittle3game = function() {
+    var paleto = new Paleto();
+    var coups = new Array();
+
+    coups =
+        ["a1cbl" ,"d1cbr" ,"b1cbl" ,"e1cbr" ,"c1cbl" ,"f1cbr",
+            "a2cbl" ,"d2cbr" ,"b2cbl" ,"e2cbr" ,"c2cbl" ,"f2cbr",
+            "a3cbl" ,"d3cbr" ,"b3cbl" ,"e3cbr" ,"c3cbl" ,"f3cbr",
+            "b5ctl" ,"a4ctr" ,"e4ctl" ,"b4ctr" ,"f4ctl" ,"d4ctr",
+            "d5ctl" ,"a5ctr" ,"f5ctl" ,"c4ctr" ,"a6ctl" ,"c5ctr",
+            "b6ctl" ,"e5ctr" ,"d6ctl" ,"c6ctr" ,"f6ctl" ,"e6ct"];
+    for (i in coups ){
+        paleto.put(coups[i]);
+
+    }
+    assertFalse(paleto.null());
+};
+

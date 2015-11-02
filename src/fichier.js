@@ -12,9 +12,11 @@ var Paleto = function () {
     var plateau = [], nb = 0,
         player1 = "White",
         player2 = "Black",
+        mode,
         currentPlayer,
         that = this,
         size;
+
     this.setNbBalls = function (billes) {
         nb += billes;
     };
@@ -78,28 +80,31 @@ var Paleto = function () {
         size = 6;
     };
 
-   /* this.offset = function (quart) {
-        var offsetI, offsetJ;
-        switch (quart) {
-            case 1 :
-                offsetI = 0;
-                offsetJ = 0;
-                break;
-            case 2 :
-                offsetI = 0;
-                offsetJ = size / 2;
-                break;
-            case 3 :
-                offsetI = size / 2;
-                offsetJ = 0;
-                break;
-            case 4 :
-                offsetI = size / 2;
-                offsetJ = size / 2;
-                break;
-        }
-        return [offsetI, offsetJ];
-    };*/
+    this. getSize = function () {
+        return size;
+    };
+    /* this.offset = function (quart) {
+     var offsetI, offsetJ;
+     switch (quart) {
+     case 1 :
+     offsetI = 0;
+     offsetJ = 0;
+     break;
+     case 2 :
+     offsetI = 0;
+     offsetJ = size / 2;
+     break;
+     case 3 :
+     offsetI = size / 2;
+     offsetJ = 0;
+     break;
+     case 4 :
+     offsetI = size / 2;
+     offsetJ = size / 2;
+     break;
+     }
+     return [offsetI, offsetJ];
+     };*/
     this.create2DArray = function(){
         var arr = new Array(3), col;
         for (col = 0; col < 3; col++) {
@@ -112,15 +117,24 @@ var Paleto = function () {
         arr = this.create2DArray();
         for (line = 0; line < 3; line++) {
             for (col = 0; col < 3; col++) {
-               // console.log(this.getCase2((2 - col) + offsetI, line + offsetJ));
+                // console.log(this.getCase2((2 - col) + offsetI, line + offsetJ));
                 arr[line][col] = this.getCase2((2 - col) + offsetI, line + offsetJ);
             }
         }
         return arr;
     };
+    this.offsetLigne = function(offsetI){
+        var res = offsetI * (this.getSize()/2);
+        return res;
+    };
+    this.offsetCol = function(offsetJ){
+        var res = offsetJ * (this.getSize()/2);
+        return res;
+    };
     this.rotation = function (offsetI, offsetJ) {
         var line, col, tmp ;
-
+        offsetI = this.offsetLigne(offsetI);
+        offsetJ = this.offsetCol(offsetJ);
         tmp = this.subArray(offsetI, offsetJ);
 
         for (line = 0; line < 3; line++) {
@@ -143,21 +157,163 @@ var Paleto = function () {
     };
     this.antirotation = function (offsetI, offsetJ) {
         var line, col, tmp;
-
+        offsetI = this.offsetLigne(offsetI);
+        offsetJ = this.offsetCol(offsetJ);
         tmp = this.antiSubRotation(offsetI, offsetJ);
 
-            for (line = 0; line < 3; line++) {
-                for (col = 0; col < 3; col++) {
-                    this.setCase(line + offsetI, col + offsetJ, tmp[line][col]);
-                }
+        for (line = 0; line < 3; line++) {
+            for (col = 0; col < 3; col++) {
+                this.setCase(line + offsetI, col + offsetJ, tmp[line][col]);
             }
+        }
 
         that.ChangeTurn();
         return true;
     };
+    this.null=function(){
+        if(this.getNbBalls() != 36){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    };
+    this.Windiag = function (coup) {
+        var t = this.transformation(coup), a = 'a', col, ligne;
+        col = t[0].charCodeAt(0) - a.charCodeAt(0);
+        ligne = parseInt(t[1]) - 1;
+        if((this.cptAlignDiagUp(ligne, col) + this.cptAlignDiagDown(ligne, col) - 1) >= 5) {
+            return true;
+        }
+        else{
+
+            return false;
+        }
+    };
+    this.WinHorizontal = function (coup) {
+        var t = this.transformation(coup), a = 'a', col, ligne;
+        col = t[0].charCodeAt(0) - a.charCodeAt(0);
+        ligne = parseInt(t[1]) - 1;
+
+        if((this.cptAlignRight(ligne, col) + this.cptAlignLeft(ligne, col) - 1)  >= 5) {
+            return true;
+        }
+        else{
+
+            return false;
+        }
+    };
+    this.WinVertical = function (coup) {
+        var t = this.transformation(coup), a = 'a', col, ligne;
+        col = t[0].charCodeAt(0) - a.charCodeAt(0);
+        ligne = parseInt(t[1]) - 1;
+
+        if((this.cptAlignUp(ligne, col) +this.cptAlignBottom(ligne, col) - 1)  >= 5) {
+            return true;
+        }
+        else{
+
+            return false;
+        }
+    };
+    this.cptAlignUp = function (ligne,col) {
+        if (this.getCase2(ligne, col) != undefined && this.getCase2(ligne, col) == this.getCurrentPlayer() ) {
+            return 1 + this.cptAlignBottom(--ligne, col);
+        }
+        else{
+            return 0;
+        }
+    };
+    this.cptAlignBottom = function (ligne,col) {
+        if(this.getCase2(ligne,col) != undefined &&this.getCase2(ligne,col) == this.getCurrentPlayer() ){
+            return 1+ this.cptAlignBottom(++ligne, col);
+        }
+        else{
+            return 0;
+        }
+    };
+    this.cptAlignLeft = function (ligne,col) {
+        if (this.getCase2(ligne, col) != undefined &&this.getCase2(ligne, col) == this.getCurrentPlayer() ) {
+            return 1 + this.cptAlignLeft(ligne, --col);
+        }
+        else{
+            return 0;
+        }
+    };
+    this.cptAlignRight = function (ligne,col) {
+        if(this.getCase2(ligne,col) != undefined &&this.getCase2(ligne,col) == this.getCurrentPlayer() ){
+            return 1+ this.cptAlignRight(ligne,++col);
+        }
+        else{
+            return 0;
+        }
+    };
+    this.cptAlignDiagUp = function (ligne,col) {
+
+        if (ligne >= 0 && col >= 0){
+            if(this.getCase2(ligne,col) != undefined &&this.getCase2(ligne,col) == this.getCurrentPlayer() ){
+                return 1+ this.cptAlignDiagUp(--ligne,--col);
+            }
+            else{
+                return 0;
+            }
+        }
+        return 0;
+    };
+    this.cptAlignDiagDown = function (ligne,col) {
+        if(ligne < size && col< size){
+            if(this.getCase2(ligne,col) != undefined &&this.getCase2(ligne,col) == this.getCurrentPlayer() ){
+                return 1+ this.cptAlignDiagDown(++ligne,++col);
+            }
+            else{
+                return 0;
+            }
+        }
+        return 0;
+    };
+    this.wichPartLr= function (part) {
+        if (part == 'l'){
+            return 0;
+        }
+        if (part == 'r'){
+            return 1;
+        }
+    };
+    this.wichPart= function (part) {
+        var res = new Array (2);
+        if (part[0] == 't') { // top
+            res[0] = 0;
+        }
+        else { // bottom
+            res[0] = 1;
+        }
+        res[1] =  this.wichPartLr(part[1]);
+        return res;
+    };
+    this.put = function(coup){ //jshint ignore:line
+        var w = new Array(2), part = new Array(2), offsets = new Array(2);
+        w[0]=coup[0];
+        w[1] = coup[1];
+        part[0] =coup[3];
+        part[1] =coup[4];
+        offsets = this.wichPart(part);
+        this.play(w);
+        if (coup[2] == 'c'){
+            this.rotation(offsets[0],offsets[1]);
+        }else{
+            this.antirotation(offsets[0],offsets[1]);
+        }
+        if(this.Windiag(w) || this.WinHorizontal(w) || this.WinVertical(w)){
+            console.log("on as gagne");
+        }
+    };
+
+
     init();
 
 
 };
+
 
 
