@@ -4,39 +4,40 @@
 MonTestCase = TestCase("MonTestCase");
 
 MonTestCase.prototype.testPlateauVide = function(){
-    var paleto = new Paleto();
+    var paleto = new Paleto(2);
 
     assertTrue(paleto.getNbBalls() == 0);
 };
 
 
 MonTestCase.prototype.testBegin = function(){
-    var paleto = new Paleto();
+    var paleto = new Paleto(2);
     assertTrue(paleto.getCurrentPlayer() == "White");
 };
 
 MonTestCase.prototype.testPlace = function(){
-    var paleto = new Paleto();
+    var paleto = new Paleto(2);
     assertTrue(paleto.play("a1") == true);
 };
 
 MonTestCase.prototype.testnewNbBall = function(){
-    var paleto = new Paleto();
+    var paleto = new Paleto(2);
     paleto.play("a1");
     assertTrue(paleto.getNbBalls() == 1);
 };
 
 MonTestCase.prototype.testnewPosition = function(){
-    var paleto = new Paleto();
+    var paleto = new Paleto(2);
     paleto.play("a1");
 
     paleto.rotation(0,0);
+
     assertTrue(paleto.getCase("c1") == "White");
     assertTrue(paleto.getCurrentPlayer() == "Black");
 };
 
 MonTestCase.prototype.testBlackPlayNb = function(){
-    var paleto = new Paleto();
+    var paleto = new Paleto(2);
     paleto.play("a1");
     paleto.rotation(0,0);
     paleto.play("a1");
@@ -45,7 +46,7 @@ MonTestCase.prototype.testBlackPlayNb = function(){
 };
 
 MonTestCase.prototype.testBlackPlayRot = function(){
-    var paleto = new Paleto();
+    var paleto = new Paleto(2);
     paleto.play("a1");
     paleto.rotation(0,0);
     paleto.play("a1");
@@ -54,7 +55,7 @@ MonTestCase.prototype.testBlackPlayRot = function(){
 };
 
 MonTestCase.prototype.testBlackPlayException = function(){
-    var paleto = new Paleto();
+    var paleto = new Paleto(2);
     paleto.play("a1");
     paleto.rotation(0,0);
     paleto.play("a1");
@@ -64,7 +65,7 @@ MonTestCase.prototype.testBlackPlayException = function(){
 };
 
 MonTestCase.prototype.testlittlegame = function(){
-    var paleto = new Paleto();
+    var paleto = new Paleto(2);
 
     paleto.play("a1");
     paleto.rotation(0,0);
@@ -105,7 +106,7 @@ MonTestCase.prototype.testlittlegame = function(){
 };
 
 MonTestCase.prototype.testlittle2game = function() {
-    var paleto = new Paleto();
+    var paleto = new Paleto(2);
 
     paleto.play("a1");
     paleto.rotation(0,0);
@@ -147,7 +148,7 @@ MonTestCase.prototype.testlittle2game = function() {
 };
 
 MonTestCase.prototype.testlittle3game = function() {
-    var paleto = new Paleto();
+    var paleto = new Paleto(2);
 
     paleto.put("c4cbl");
     paleto.put("d4abr");
@@ -163,7 +164,7 @@ MonTestCase.prototype.testlittle3game = function() {
 };
 
 MonTestCase.prototype.testlittle3game = function() {
-    var paleto = new Paleto();
+    var paleto = new Paleto(2);
     var coups = new Array();
 
     coups =
@@ -180,3 +181,13 @@ MonTestCase.prototype.testlittle3game = function() {
     assertFalse(paleto.null());
 };
 
+MonTestCase.prototype.testXlgame = function() {
+    var paleto = new Paleto(4,"XL");
+    paleto.play("d1");
+    paleto.rotation(2,0);
+    paleto.play("i9");
+    paleto.antirotation(2,2);
+    console.log(paleto.getCase2(6,8));
+    console.log(paleto.getCurrentPlayer());
+    assertTrue(paleto.getNbBalls() == 2);
+};

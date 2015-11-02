@@ -7,12 +7,17 @@ function NotEmptyException(msg) {
     this.name = "Not Empty";
 }
 
-var Paleto = function () {
+var Paleto = function (nbJ,mod) {
     "use strict";
     var plateau = [], nb = 0,
         player1 = "White",
         player2 = "Black",
-        mode,
+        playerXl1 = "Red",
+        playerXl2 = "Yellow",
+        playerXl3 = "green",
+        playerXl4 = "Blue",
+        mode = mod,
+        nbJoueur = nbJ,
         currentPlayer,
         that = this,
         size;
@@ -23,7 +28,9 @@ var Paleto = function () {
     this.setCase = function (i, j, n) {
         plateau[i][j] = n;
     };
-
+    this.getmod = function () {
+        return mode;
+    };
     this.transformation = function (a) {
         var t = [a[0], a[1]];
         return t;
@@ -42,6 +49,9 @@ var Paleto = function () {
     this.getNbBalls = function () {
         return nb;
     };
+    this.getNbJoueur = function () {
+        return nbJoueur;
+    };
     this.getCurrentPlayer = function () {
         return currentPlayer;
     };
@@ -49,10 +59,50 @@ var Paleto = function () {
         currentPlayer = player;
     };
     this.ChangeTurn = function () {
+        if ( this.getNbJoueur() == 2 ) {
+            this.changeNormal();
+        } else {
+            this.changeXL();
+        }
+    };
+    this.changeNormal = function () {
         if (that.getCurrentPlayer() === "White") {
             that.setCurrentPlayer("Black");
         } else {
             that.setCurrentPlayer("White");
+        }
+    };
+    this.changeXL = function () {
+        if (this.getNbJoueur() == 3) {
+            this.changeXL3();
+        } else {
+            this.changeXL4();
+        }
+    };
+    this.changeXL3 = function () {
+        switch (this.getCurrentPlayer()){
+            case "Red":
+                    this.setCurrentPlayer("Yellow");
+                    break;
+            case "Yellow":
+                    this.setCurrentPlayer("Green");
+            default :
+                    this.setCurrentPlayer("Red");
+                    break;
+        }
+    };
+    this.changeXL4 = function () {
+        switch (this.getCurrentPlayer()){
+            case "Red":
+                this.setCurrentPlayer("Yellow");
+                break;
+            case "Yellow":
+                this.setCurrentPlayer("Blue");
+            case "Green":
+                this.setCurrentPlayer("Blue")
+            default :
+                this.setCurrentPlayer("Red");
+                break;
         }
     };
     this.play = function (w) {
@@ -67,6 +117,20 @@ var Paleto = function () {
         that.setNbBalls(1);
         return true;
     };
+
+    var initXL = function() {
+        nb = 0;
+        var line, col;
+        for (line = 0; line < 9; line++) {
+            plateau[line] = [];
+            for (col = 0; col < 9; col++) {
+                that.setCase(line, col, 0);
+            }
+        }
+        currentPlayer = playerXl1;
+        size = 9;
+    };
+
     var init = function () {
         nb = 0;
         var line, col;
@@ -83,36 +147,14 @@ var Paleto = function () {
     this. getSize = function () {
         return size;
     };
-    /* this.offset = function (quart) {
-     var offsetI, offsetJ;
-     switch (quart) {
-     case 1 :
-     offsetI = 0;
-     offsetJ = 0;
-     break;
-     case 2 :
-     offsetI = 0;
-     offsetJ = size / 2;
-     break;
-     case 3 :
-     offsetI = size / 2;
-     offsetJ = 0;
-     break;
-     case 4 :
-     offsetI = size / 2;
-     offsetJ = size / 2;
-     break;
-     }
-     return [offsetI, offsetJ];
-     };*/
-    this.create2DArray = function(){
+    this.create2DArray = function() {
         var arr = new Array(3), col;
         for (col = 0; col < 3; col++) {
             arr[col] = new Array(3);
         }
         return arr;
     };
-    this.subArray = function(offsetI ,offsetJ) {
+    this.subArray = function(offsetI, offsetJ) {
         var arr, line, col;
         arr = this.create2DArray();
         for (line = 0; line < 3; line++) {
@@ -124,15 +166,15 @@ var Paleto = function () {
         return arr;
     };
     this.offsetLigne = function(offsetI){
-        var res = offsetI * (this.getSize()/2);
+        var res = offsetI * (3);
         return res;
     };
-    this.offsetCol = function(offsetJ){
-        var res = offsetJ * (this.getSize()/2);
+    this.offsetCol = function(offsetJ) {
+        var res = offsetJ * (3);
         return res;
     };
     this.rotation = function (offsetI, offsetJ) {
-        var line, col, tmp ;
+        var line, col, tmp;
         offsetI = this.offsetLigne(offsetI);
         offsetJ = this.offsetCol(offsetJ);
         tmp = this.subArray(offsetI, offsetJ);
@@ -170,14 +212,11 @@ var Paleto = function () {
         that.ChangeTurn();
         return true;
     };
-    this.null=function(){
-        if(this.getNbBalls() != 36){
+    this.null = function () {
+        if(this.getNbBalls() != 36) {
             return true;
         }
-        else{
-            return false;
-        }
-
+        return false;
     };
     this.Windiag = function (coup) {
         var t = this.transformation(coup), a = 'a', col, ligne;
@@ -212,42 +251,31 @@ var Paleto = function () {
         if((this.cptAlignUp(ligne, col) +this.cptAlignBottom(ligne, col) - 1)  >= 5) {
             return true;
         }
-        else{
-
-            return false;
-        }
+        return false;
     };
     this.cptAlignUp = function (ligne,col) {
         if (this.getCase2(ligne, col) != undefined && this.getCase2(ligne, col) == this.getCurrentPlayer() ) {
             return 1 + this.cptAlignBottom(--ligne, col);
         }
-        else{
-            return 0;
-        }
+        return 0;
     };
     this.cptAlignBottom = function (ligne,col) {
         if(this.getCase2(ligne,col) != undefined &&this.getCase2(ligne,col) == this.getCurrentPlayer() ){
             return 1+ this.cptAlignBottom(++ligne, col);
         }
-        else{
-            return 0;
-        }
+        return 0;
     };
-    this.cptAlignLeft = function (ligne,col) {
+    this.cptAlignLeft = function (ligne, col) {
         if (this.getCase2(ligne, col) != undefined &&this.getCase2(ligne, col) == this.getCurrentPlayer() ) {
             return 1 + this.cptAlignLeft(ligne, --col);
         }
-        else{
-            return 0;
-        }
+        return 0;
     };
     this.cptAlignRight = function (ligne,col) {
         if(this.getCase2(ligne,col) != undefined &&this.getCase2(ligne,col) == this.getCurrentPlayer() ){
             return 1+ this.cptAlignRight(ligne,++col);
         }
-        else{
-            return 0;
-        }
+        return 0;
     };
     this.cptAlignDiagUp = function (ligne,col) {
 
@@ -310,7 +338,11 @@ var Paleto = function () {
     };
 
 
-    init();
+    if (this.getmod() != undefined) {
+        initXL();
+    }else{
+        init();
+    }
 
 
 };
