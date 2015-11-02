@@ -191,3 +191,17 @@ MonTestCase.prototype.testXlgame = function() {
     console.log(paleto.getCurrentPlayer());
     assertTrue(paleto.getNbBalls() == 2);
 };
+
+MonTestCase.prototype.testXl2game = function() {
+    var paleto = new Paleto(4,"XL");
+    assertTrue(paleto.getCurrentPlayer() == "Red");
+    paleto.play("d1");
+    paleto.rotation(2,0);
+    assertTrue(paleto.getCurrentPlayer() == "Yellow");
+    paleto.play("i9");
+    paleto.antirotation(2,2);
+    assertTrue(paleto.getCurrentPlayer() == "Green");
+    paleto.play("b5");
+    paleto.rotation(0,0);
+    assertTrue(paleto.getCurrentPlayer() == "Blue");
+};

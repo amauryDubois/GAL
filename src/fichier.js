@@ -97,9 +97,11 @@ var Paleto = function (nbJ,mod) {
                 this.setCurrentPlayer("Yellow");
                 break;
             case "Yellow":
-                this.setCurrentPlayer("Blue");
+                this.setCurrentPlayer("Green");
+                break;
             case "Green":
-                this.setCurrentPlayer("Blue")
+                this.setCurrentPlayer("Blue");
+                break;
             default :
                 this.setCurrentPlayer("Red");
                 break;
