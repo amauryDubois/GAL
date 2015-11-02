@@ -10,12 +10,11 @@ function NotEmptyException(msg) {
 var Paleto = function (nbJ,mod) {
     "use strict";
     var plateau = [], nb = 0,
-        player1 = "White",
-        player2 = "Black",
-        playerXl1 = "Red",
-        playerXl2 = "Yellow",
-        playerXl3 = "green",
-        playerXl4 = "Blue",
+        playerIndex = 0,
+        player1 = "Red",
+        player2 = "Yellow",
+        player3 = "green",
+        player4 = "Blue",
         mode = mod,
         nbJoueur = nbJ,
         currentPlayer,
@@ -73,39 +72,14 @@ var Paleto = function (nbJ,mod) {
         }
     };
     this.changeXL = function () {
-        if (this.getNbJoueur() == 3) {
-            this.changeXL3();
-        } else {
-            this.changeXL4();
-        }
-    };
-    this.changeXL3 = function () {
-        switch (this.getCurrentPlayer()){
-            case "Red":
-                    this.setCurrentPlayer("Yellow");
-                    break;
-            case "Yellow":
-                    this.setCurrentPlayer("Green");
-            default :
-                    this.setCurrentPlayer("Red");
-                    break;
-        }
-    };
-    this.changeXL4 = function () {
-        switch (this.getCurrentPlayer()){
-            case "Red":
-                this.setCurrentPlayer("Yellow");
-                break;
-            case "Yellow":
-                this.setCurrentPlayer("Green");
-                break;
-            case "Green":
-                this.setCurrentPlayer("Blue");
-                break;
-            default :
-                this.setCurrentPlayer("Red");
-                break;
-        }
+        var list = [player1, player2, player3, player4];
+
+        do{
+            playerIndex = (playerIndex + 1 > 3) ? 0 : playerIndex + 1;
+        } while (list[playerIndex] === 0 );
+
+        currentPlayer = list[playerIndex];
+
     };
     this.play = function (w) {
         var t = that.transformation(w), a = 'a', line, col;
@@ -119,33 +93,51 @@ var Paleto = function (nbJ,mod) {
         that.setNbBalls(1);
         return true;
     };
-
-    var initXL = function() {
-        nb = 0;
+    var initBoard = function ( max) {
         var line, col;
-        for (line = 0; line < 9; line++) {
+        for (line = 0; line < max; line++) {
             plateau[line] = [];
-            for (col = 0; col < 9; col++) {
+            for (col = 0; col < max; col++) {
                 that.setCase(line, col, 0);
             }
         }
-        currentPlayer = playerXl1;
+    };
+    var initXL4 = function() {
+        nb = 0;
+        initBoard(9);
+        player1 = "Red";
+        player2 = "Yellow";
+        player3 = "Green";
+        player4 = "Blue";
+        currentPlayer = player1;
         size = 9;
     };
-
+    var initXL3 = function() {
+        nb = 0;
+        initBoard(9);
+        player1 = "Red";
+        player2 = "Yellow";
+        player3 = "Green";
+        player4 = 0;
+        currentPlayer = player1;
+        size = 9;
+    };
     var init = function () {
         nb = 0;
-        var line, col;
-        for (line = 0; line < 6; line++) {
-            plateau[line] = [];
-            for (col = 0; col < 6; col++) {
-                that.setCase(line, col, 0);
-            }
-        }
+        player1 = "White";
+        player2 = "Black";
+        player3 = 0;
+        player4 = 0;
+        initBoard(6);
         currentPlayer = player1;
         size = 6;
     };
-
+    this.setPlayers = function (a,b,c) {
+        player1 = a;
+        player2 = b;
+        player3 = c;
+        this.setCurrentPlayer(player1);
+    };
     this. getSize = function () {
         return size;
     };
@@ -341,7 +333,12 @@ var Paleto = function (nbJ,mod) {
 
 
     if (this.getmod() != undefined) {
-        initXL();
+        if (this.getNbJoueur() == 3 ){
+            initXL3();
+        }else{
+            initXL4();
+        }
+
     }else{
         init();
     }
