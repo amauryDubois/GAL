@@ -93,6 +93,16 @@ var Paleto = function (nbJ,mod) {
         that.setNbBalls(1);
         return true;
     };
+    this.playCoord = function (ligne,col) {
+
+        if (that.getCase2(ligne,col) !== 0) {
+            throw new NotEmptyException("deja utilise");
+        }
+
+        that.setCase(ligne, col, that.getCurrentPlayer());
+        that.setNbBalls(1);
+        return true;
+    };
     var initBoard = function ( max) {
         var line, col;
         for (line = 0; line < max; line++) {
@@ -330,7 +340,32 @@ var Paleto = function (nbJ,mod) {
             console.log("on as gagne");
         }
     };
+    this.randCoup = function () {
+        var ligne = (Math.random() *100 )% 6 ;
+        return  parseInt(ligne);
+    };
+    this.isWin = function (w) {
+      if(this.Windiag(w) || this.WinHorizontal(w) || this.WinVertical(w)) {
+          return true;
+      }
+        return false;
+    };
+    this.coupValide = function (W) {
+        while( this.getCase2(W[0],W[1]) == undefined){
+            W[0] = this.randCoup();
+            W[1] = this.randCoup();
+        }
+    };
+    this.randPlayNormal = function(){ //jshint ignore:line
+        var W = new Array (2);
+        W[0] = this.randCoup();
+        W[1] = this.randCoup();
+        this.coupValide(W);
 
+        console.log(W);
+        this.playCoord(W[0],W[1]);
+        this.isWin(W);
+    };
 
     if (this.getmod() != undefined) {
         if (this.getNbJoueur() == 3 ){

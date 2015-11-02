@@ -221,3 +221,8 @@ MonTestCase.prototype.testXl3game = function() {
     assertTrue(paleto.getCurrentPlayer() == "Green");
 };
 
+MonTestCase.prototype.testRandgame = function() {
+    var paleto = new Paleto();
+    paleto.randPlayNormal();
+};
+
